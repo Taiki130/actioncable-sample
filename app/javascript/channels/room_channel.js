@@ -3,6 +3,15 @@ import consumer from "./consumer"
 consumer.subscriptions.create("RoomChannel", {
   connected() {
     // Called when the subscription is ready for use on the server
+    document.
+      querySelector('input[data-behavior="room_speaker"]').
+      addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+          this.speak(event.target.value);
+          event.target.value = '';
+          return event.preventDefault();
+      }
+    });
   },
 
   disconnected() {
@@ -11,10 +20,10 @@ consumer.subscriptions.create("RoomChannel", {
 
   received(data) {
     // Called when there's incoming data on the websocket for this channel
-    alert(data['message']);
+    const element = document.querySelector('#message')
+    element.insertAdjacentHTML('beforeend', data['message'])
   },
-
-  speak: function() {
+  speak: function(message) {
     return this.perform('speak', {message: message});
-  }
+  },
 });
